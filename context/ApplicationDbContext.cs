@@ -11,6 +11,8 @@ namespace WanderMateBackend.context
           public ApplicationDbContext(DbContextOptions options) 
         : base (options)
         {    
+
+            
         }
     }
 }

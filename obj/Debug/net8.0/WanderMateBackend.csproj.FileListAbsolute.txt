@@ -1,0 +1,8 @@
+D:\2024\iic\finalProject\WanderMatebackend\obj\Debug\net8.0\WanderMateBackend.csproj.AssemblyReference.cache
+D:\2024\iic\finalProject\WanderMatebackend\obj\Debug\net8.0\WanderMateBackend.GeneratedMSBuildEditorConfig.editorconfig
+D:\2024\iic\finalProject\WanderMatebackend\obj\Debug\net8.0\WanderMateBackend.AssemblyInfoInputs.cache
+D:\2024\iic\finalProject\WanderMatebackend\obj\Debug\net8.0\WanderMateBackend.AssemblyInfo.cs
+D:\2024\iic\finalProject\WanderMatebackend\obj\Debug\net8.0\WanderMateBackend.csproj.CoreCompileInputs.cache
+D:\2024\iic\finalProject\WanderMatebackend\obj\Debug\net8.0\WanderMateBackend.MvcApplicationPartsAssemblyInfo.cs
+D:\2024\iic\finalProject\WanderMatebackend\obj\Debug\net8.0\WanderMateBackend.MvcApplicationPartsAssemblyInfo.cache
+D:\2024\iic\finalProject\WanderMatebackend\obj\Debug\net8.0\WanderMateBackend.sourcelink.json
