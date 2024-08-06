@@ -1,0 +1,6 @@
+@WanderMateBackend_HostAddress = http://localhost:5171
+
+GET {{WanderMateBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
