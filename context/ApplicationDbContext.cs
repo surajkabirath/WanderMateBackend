@@ -15,6 +15,7 @@ namespace WanderMateBackend.context
         }
 
 
-        DbSet<Hotel> hotels {get; set;}
+       public DbSet<Hotel> Hotels {get; set;}
     }
 }
+
