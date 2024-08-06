@@ -9,11 +9,12 @@ namespace WanderMateBackend.context
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions options)
-      : base(options)
+            public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
-            DbSet<Hotel> hotels;
         }
+
+
+        DbSet<Hotel> hotels {get; set;}
     }
 }

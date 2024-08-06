@@ -11,7 +11,7 @@ namespace WanderMateBackend.Models
         [Key]
         public int Id {get; set;}
         public string? Name {get; set;}
-        public decimal Price {get; set;}
+        public float Price {get; set;}
         public List<string> ImageUrl {get; set;} = new List<string> ();
         public string? Description {get; set;}
         public bool FreeCancellation {get; set;} = false;
