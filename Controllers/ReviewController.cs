@@ -20,16 +20,40 @@ namespace WanderMateBackend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetReviews()
         {
-           try{
-            var reviews = await _context.Reviews.ToListAsync();
-            if(reviews == null){
-                return NotFound("No Review Data Found");
-            }
-            return Ok(reviews);
+            try
+            {
+                var reviews = await _context.Reviews.Include(r => r.Hotel).ToListAsync();
+                if (reviews == null)
+                {
+                    return NotFound("No Review Data Found");
+                }
+                return Ok(reviews);
 
-           }catch(Exception ex){
-            return StatusCode(500,ex.Message);
-           }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
+        [HttpPost]
+        public async Task<IActionResult> CreateReview([FromBody] Models.Review review)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid Data");
+                }
+                review.CreatedOn = DateTime.Now;
+                var createReview = await _context.Reviews.AddAsync(review);
+                await _context.SaveChangesAsync();
+                return Ok(new { message = "Review Created Successfully!", review });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
     }
 }

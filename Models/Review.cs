@@ -13,7 +13,12 @@ namespace WanderMateBackend.Models
         public int Rating{get;set;}
         public string? ReviewText  { get; set; }
         public DateTime CreatedOn  { get; set; }
+
+           // Foreign key for the Hotel
         public int HotelId { get; set; }
+
+        
+   // Navigation property to reference the associated Hotel
         public Hotel? Hotel { get; set; }
 
     }
