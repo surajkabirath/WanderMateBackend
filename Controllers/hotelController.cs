@@ -25,10 +25,12 @@ namespace WanderMateBackend.Controllers
             {
 
                 var hotel = await _context.Hotels.ToListAsync();
-                if(hotel == null){
+                if (hotel == null)
+                {
                     return NotFound("No Hotel Data Found");
                 }
-                var hotelDto = hotel.Select(hotel=> new HotelDTOs{
+                var hotelDto = hotel.Select(hotel => new HotelDTOs
+                {
                     Id = hotel.Id,
                     Name = hotel.Name,
                     Price = hotel.Price,
@@ -92,12 +94,23 @@ namespace WanderMateBackend.Controllers
 
             try
             {
-                var hotel = await _context.Hotels.FindAsync(id);
-                if (hotel == null)
+                var hotelById = await _context.Hotels.FindAsync(id);
+                if (hotelById == null)
                 {
                     return NotFound("Given Hotel ID is not Found");
                 }
-                return Ok(new { message = "Given ID is Found", hotel });
+                var hotelDtoById = new HotelDTOs
+                {
+                    Id = hotelById.Id,
+                    Name = hotelById.Name,
+                    Price = hotelById.Price,
+                    ImageUrl = hotelById.ImageUrl,
+                    Description = hotelById.Description,
+                    FreeCancellation = hotelById.FreeCancellation,
+                    ReserveNow = hotelById.ReserveNow
+                };
+
+                return Ok(new { message = "Given Id Details:", hotelDtoById });
             }
             catch (Exception)
             {
