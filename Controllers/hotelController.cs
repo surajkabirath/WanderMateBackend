@@ -38,31 +38,35 @@ namespace WanderMateBackend.Controllers
             return Ok(hotel);
         }
 
-   [HttpPut("id")]
-public IActionResult UpdateHotel(int Id, [FromBody] Hotel hotel)
-{
-    var hotelToUpdate = _context.Hotels.Find(Id);
+        [HttpPut("id")]
+        public IActionResult UpdateHotel(int Id, [FromBody] Hotel hotel)
+        {
+            var hotelToUpdate = _context.Hotels.Find(Id);
 
-    if (hotelToUpdate == null)
-    {
-        return NotFound();
-    }
+            if (hotelToUpdate == null)
+            {
+                return NotFound();
+            }
 
-    hotelToUpdate.Name = hotel.Name;
-    hotelToUpdate.Price = hotel.Price;
-    hotelToUpdate.ImageUrl = hotel.ImageUrl;
-    hotelToUpdate.Description = hotel.Description;
-    hotelToUpdate.FreeCancellation = hotel.FreeCancellation;
-    hotelToUpdate.ReserveNow = hotel.ReserveNow;
+            hotelToUpdate.Name = hotel.Name;
+            hotelToUpdate.Price = hotel.Price;
+            hotelToUpdate.ImageUrl = hotel.ImageUrl;
+            hotelToUpdate.Description = hotel.Description;
+            hotelToUpdate.FreeCancellation = hotel.FreeCancellation;
+            hotelToUpdate.ReserveNow = hotel.ReserveNow;
 
-    _context.SaveChanges();
-    return Ok(hotelToUpdate);
-}
+            _context.SaveChanges();
+            return Ok(hotelToUpdate);
+        }
 
         [HttpDelete("id")]
         public IActionResult DeleteHotel(int Id)
         {
             var hotel = _context.Hotels.Find(Id);
+            if (hotel == null)
+            {
+                return NotFound();
+            }
             _context.Hotels.Remove(hotel);
             _context.SaveChanges();
             return Ok(hotel);
@@ -70,8 +74,13 @@ public IActionResult UpdateHotel(int Id, [FromBody] Hotel hotel)
         [HttpGet("search")]
         public IActionResult SearchHotel(string name)
         {
-            var hotel = _context.Hotels.Where(h => h.Name.Contains(name)).ToList();
+            var hotel = _context.Hotels.Where(h => h.Name!.Contains(name)).ToList();
+            if (hotel == null)
+            {
+                return NotFound();
+            }
             return Ok(hotel);
         }
+
     }
 }
