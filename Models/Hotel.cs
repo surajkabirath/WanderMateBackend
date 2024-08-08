@@ -20,6 +20,8 @@ namespace WanderMateBackend.Models
         public bool FreeCancellation {get; set;} = false;
         public bool ReserveNow {get ; set;} = false;
 
+        public List<Review> Reviews {get; set;} = new List<Review>();
+
 
     }
 }
