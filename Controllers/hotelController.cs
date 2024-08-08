@@ -38,21 +38,26 @@ namespace WanderMateBackend.Controllers
             return Ok(hotel);
         }
 
-        [HttpPut("id")]
-        public IActionResult UpdateHotel(int Id, [FromBody] Hotel hotel)
-        {
-            var hotelToUpdate = _context.Hotels.Find(Id);
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-            hotelToUpdate.Name = hotel.Name;
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-            hotelToUpdate.Price = hotel.Price;
-            hotelToUpdate.ImageUrl = hotel.ImageUrl;
-            hotelToUpdate.Description = hotel.Description;
-            hotelToUpdate.FreeCancellation = hotel.FreeCancellation;
-            hotelToUpdate.ReserveNow = hotel.ReserveNow;
-            _context.SaveChanges();
-            return Ok(hotelToUpdate);
-        }
+   [HttpPut("id")]
+public IActionResult UpdateHotel(int Id, [FromBody] Hotel hotel)
+{
+    var hotelToUpdate = _context.Hotels.Find(Id);
+
+    if (hotelToUpdate == null)
+    {
+        return NotFound();
+    }
+
+    hotelToUpdate.Name = hotel.Name;
+    hotelToUpdate.Price = hotel.Price;
+    hotelToUpdate.ImageUrl = hotel.ImageUrl;
+    hotelToUpdate.Description = hotel.Description;
+    hotelToUpdate.FreeCancellation = hotel.FreeCancellation;
+    hotelToUpdate.ReserveNow = hotel.ReserveNow;
+
+    _context.SaveChanges();
+    return Ok(hotelToUpdate);
+}
 
         [HttpDelete("id")]
         public IActionResult DeleteHotel(int Id)
