@@ -9,13 +9,29 @@ namespace WanderMateBackend.context
 {
     public class ApplicationDbContext : DbContext
     {
-            public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
         }
 
 
-       public DbSet<Hotel> Hotels {get; set;}
+        public DbSet<Hotel> Hotels { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Review>()
+            .HasOne(r => r.Hotel)
+            .WithMany(h => h.Reviews)
+            .HasForeignKey(r => r.HotelId);
+
+
+
+
+
+        }
     }
 }
 
