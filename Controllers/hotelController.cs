@@ -24,7 +24,7 @@ namespace WanderMateBackend.Controllers
             {
                 var hotel = await _context.Hotels.ToListAsync();
 
-                return Ok(new { message = "The hotel is deleted Successfully!", hotel });
+                return Ok(new { message = "The Hotel Data fectched  Successfully!", hotel });
             }
             catch (Exception)
             {
@@ -35,25 +35,32 @@ namespace WanderMateBackend.Controllers
 
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateHotel([FromBody] Hotel hotel)
+       [HttpPost]
+public async Task<IActionResult> CreateHotel([FromBody] Hotel hotel)
+{
+    try
+    {
+        if (hotel == null)
         {
-            try
-            {
-                if (hotel == null)
-                {
-                    return BadRequest();
-                }
-                var newHotel = await _context.Hotels.AddAsync(hotel);
-                await _context.SaveChangesAsync();
-                return Ok(new { message = "hotel created successfully!", newHotel });
-            }
-            catch (Exception)
-            {
-                return StatusCode(500, "An error occurred while processing your request.");
-            }
-
+            return BadRequest();
         }
+
+        await _context.Hotels.AddAsync(hotel);
+        await _context.SaveChangesAsync();
+
+        var response = new
+        {
+            message = "Hotel created successfully!",
+            hotel
+        };
+
+        return CreatedAtAction(nameof(GetHotelById), new { id = hotel.Id }, response);
+    }
+    catch (Exception)
+    {
+        return StatusCode(500, "An error occurred while processing your request.");
+    }
+}
 
         [HttpGet("Id")]
         public async Task<IActionResult> GetHotelById(int Id)
@@ -135,7 +142,7 @@ namespace WanderMateBackend.Controllers
                 {
                     return NotFound();
                 }
-                return Ok(hotel);
+                return Ok(new { message = "Hotel Name is Found Successfully!!", hotel });
             }
             catch (Exception)
             {
