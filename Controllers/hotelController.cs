@@ -46,7 +46,7 @@ namespace WanderMateBackend.Controllers
                 }
                 var newHotel = await _context.Hotels.AddAsync(hotel);
                 await _context.SaveChangesAsync();
-                return Ok(new{message="hotel created successfully!",newHotel});
+                return Ok(new { message = "hotel created successfully!", newHotel });
             }
             catch (Exception)
             {
@@ -58,42 +58,71 @@ namespace WanderMateBackend.Controllers
         [HttpGet("Id")]
         public async Task<IActionResult> GetHotelById(int Id)
         {
-            var hotel = await _context.Hotels.FindAsync(Id);
-            return Ok(hotel);
+
+            try
+            {
+                var hotel = await _context.Hotels.FindAsync(Id);
+                if (hotel == null)
+                {
+                    return NotFound();
+                }
+                return Ok(new { message = "Given ID is Found", hotel });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+
         }
 
         [HttpPut("id")]
         public async Task<IActionResult> UpdateHotel(int Id, [FromBody] Hotel hotel)
         {
-            var hotelToUpdate = await _context.Hotels.FindAsync(Id);
-
-            if (hotelToUpdate == null)
+            try
             {
-                return NotFound();
+                var hotelToUpdate = await _context.Hotels.FindAsync(Id);
+
+                if (hotelToUpdate == null)
+                {
+                    return NotFound();
+                }
+
+                hotelToUpdate.Name = hotel.Name;
+                hotelToUpdate.Price = hotel.Price;
+                hotelToUpdate.ImageUrl = hotel.ImageUrl;
+                hotelToUpdate.Description = hotel.Description;
+                hotelToUpdate.FreeCancellation = hotel.FreeCancellation;
+                hotelToUpdate.ReserveNow = hotel.ReserveNow;
+
+                await _context.SaveChangesAsync();
+                return Ok(new{message="Hotel is Updated Successfully!!",hotelToUpdate});
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An error occurred while processing your request.");
             }
 
-            hotelToUpdate.Name = hotel.Name;
-            hotelToUpdate.Price = hotel.Price;
-            hotelToUpdate.ImageUrl = hotel.ImageUrl;
-            hotelToUpdate.Description = hotel.Description;
-            hotelToUpdate.FreeCancellation = hotel.FreeCancellation;
-            hotelToUpdate.ReserveNow = hotel.ReserveNow;
 
-            await _context.SaveChangesAsync();
-            return Ok(hotelToUpdate);
         }
 
         [HttpDelete("id")]
         public async Task<IActionResult> DeleteHotel(int Id)
         {
-            var hotel = await _context.Hotels.FindAsync(Id);
-            if (hotel == null)
-            {
-                return NotFound();
+            try{
+                var hotel = await _context.Hotels.FindAsync(Id);
+                if (hotel == null)
+                {
+                    return NotFound();
+                }
+                _context.Hotels.Remove(hotel);
+                await _context.SaveChangesAsync();
+                return Ok(new{message="Hotel is Deleted Successfully!!",hotel});
             }
-            _context.Hotels.Remove(hotel);
-            await _context.SaveChangesAsync();
-            return Ok(hotel);
+            catch (Exception)
+            {
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+          
         }
         [HttpGet("search")]
         public async Task<IActionResult> SearchHotel(string name)
