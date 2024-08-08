@@ -42,7 +42,7 @@ public async Task<IActionResult> CreateHotel([FromBody] Hotel hotel)
     {
         if (hotel == null)
         {
-            return BadRequest();
+            return BadRequest("Hotel field are Empty");
         }
 
         await _context.Hotels.AddAsync(hotel);
@@ -62,16 +62,16 @@ public async Task<IActionResult> CreateHotel([FromBody] Hotel hotel)
     }
 }
 
-        [HttpGet("Id")]
-        public async Task<IActionResult> GetHotelById(int Id)
+        [HttpGet("id")]
+        public async Task<IActionResult> GetHotelById(int id)
         {
 
             try
             {
-                var hotel = await _context.Hotels.FindAsync(Id);
+                var hotel = await _context.Hotels.FindAsync(id);
                 if (hotel == null)
                 {
-                    return NotFound();
+                    return NotFound("Given Hotel ID is not Found");
                 }
                 return Ok(new { message = "Given ID is Found", hotel });
             }
@@ -91,7 +91,7 @@ public async Task<IActionResult> CreateHotel([FromBody] Hotel hotel)
 
                 if (hotelToUpdate == null)
                 {
-                    return NotFound();
+                    return NotFound("Given Hotel ID is not Found");
                 }
 
                 hotelToUpdate.Name = hotel.Name;
@@ -120,7 +120,7 @@ public async Task<IActionResult> CreateHotel([FromBody] Hotel hotel)
                 var hotel = await _context.Hotels.FindAsync(Id);
                 if (hotel == null)
                 {
-                    return NotFound();
+                    return NotFound("Hotel is not Found");
                 }
                 _context.Hotels.Remove(hotel);
                 await _context.SaveChangesAsync();
@@ -140,7 +140,7 @@ public async Task<IActionResult> CreateHotel([FromBody] Hotel hotel)
                 var hotel = await _context.Hotels.Where(h => h.Name!.Contains(name)).ToListAsync();
                 if (hotel == null)
                 {
-                    return NotFound();
+                    return NotFound("Hotel Name is not Found");
                 }
                 return Ok(new { message = "Hotel Name is Found Successfully!!", hotel });
             }
