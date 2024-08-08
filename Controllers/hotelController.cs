@@ -23,9 +23,22 @@ namespace WanderMateBackend.Controllers
         {
             try
             {
-                var hotel = await _context.Hotels.ToListAsync();
 
-                return Ok(new { message = "The Hotel Data fectched  Successfully!", hotel });
+                var hotel = await _context.Hotels.ToListAsync();
+                if(hotel == null){
+                    return NotFound("No Hotel Data Found");
+                }
+                var hotelDto = hotel.Select(hotel=> new HotelDTOs{
+                    Id = hotel.Id,
+                    Name = hotel.Name,
+                    Price = hotel.Price,
+                    ImageUrl = hotel.ImageUrl,
+                    Description = hotel.Description,
+                    FreeCancellation = hotel.FreeCancellation,
+                    ReserveNow = hotel.ReserveNow
+                });
+
+                return Ok(new { message = "The Hotel Data fectched  Successfully!", hotelDto });
             }
             catch (Exception)
             {
