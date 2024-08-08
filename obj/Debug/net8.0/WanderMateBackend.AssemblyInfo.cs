@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WanderMateBackend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d2a58a97a3f4cce98d45ee760736a9ff2875c0a1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+95811a33048fd7d86732e6cc399805d9bacec704")]
 [assembly: System.Reflection.AssemblyProductAttribute("WanderMateBackend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WanderMateBackend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
