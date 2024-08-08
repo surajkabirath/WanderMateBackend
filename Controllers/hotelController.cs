@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WanderMateBackend.context;
 using WanderMateBackend.Models;
 namespace WanderMateBackend.Controllers
@@ -17,31 +18,54 @@ namespace WanderMateBackend.Controllers
             _context = context;
         }
         [HttpGet]
-        public IActionResult GetHotels()
+        public async Task<IActionResult> GetHotels()
         {
-            var hotel = _context.Hotels.ToList();
-            return Ok(hotel);
+            try
+            {
+                var hotel = await _context.Hotels.ToListAsync();
+
+                return Ok(new { message = "The hotel is deleted Successfully!", hotel });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An error occurred while processing your request.");
+
+            }
+
+
         }
 
         [HttpPost]
-        public IActionResult CreateHotel([FromBody] Hotel hotel)
+        public async Task<IActionResult> CreateHotel([FromBody] Hotel hotel)
         {
-            var newHotel = _context.Hotels.Add(hotel);
-            _context.SaveChanges();
-            return Ok(newHotel.Entity);
+            try
+            {
+                if (hotel == null)
+                {
+                    return BadRequest();
+                }
+                var newHotel = await _context.Hotels.AddAsync(hotel);
+                await _context.SaveChangesAsync();
+                return Ok(new{message="hotel created successfully!",newHotel});
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+
         }
 
         [HttpGet("Id")]
-        public IActionResult GetHotelById(int Id)
+        public async Task<IActionResult> GetHotelById(int Id)
         {
-            var hotel = _context.Hotels.Find(Id);
+            var hotel = await _context.Hotels.FindAsync(Id);
             return Ok(hotel);
         }
 
         [HttpPut("id")]
-        public IActionResult UpdateHotel(int Id, [FromBody] Hotel hotel)
+        public async Task<IActionResult> UpdateHotel(int Id, [FromBody] Hotel hotel)
         {
-            var hotelToUpdate = _context.Hotels.Find(Id);
+            var hotelToUpdate = await _context.Hotels.FindAsync(Id);
 
             if (hotelToUpdate == null)
             {
@@ -55,26 +79,26 @@ namespace WanderMateBackend.Controllers
             hotelToUpdate.FreeCancellation = hotel.FreeCancellation;
             hotelToUpdate.ReserveNow = hotel.ReserveNow;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return Ok(hotelToUpdate);
         }
 
         [HttpDelete("id")]
-        public IActionResult DeleteHotel(int Id)
+        public async Task<IActionResult> DeleteHotel(int Id)
         {
-            var hotel = _context.Hotels.Find(Id);
+            var hotel = await _context.Hotels.FindAsync(Id);
             if (hotel == null)
             {
                 return NotFound();
             }
             _context.Hotels.Remove(hotel);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return Ok(hotel);
         }
         [HttpGet("search")]
-        public IActionResult SearchHotel(string name)
+        public async Task<IActionResult> SearchHotel(string name)
         {
-            var hotel = _context.Hotels.Where(h => h.Name!.Contains(name)).ToList();
+            var hotel = await _context.Hotels.Where(h => h.Name!.Contains(name)).ToListAsync();
             if (hotel == null)
             {
                 return NotFound();
