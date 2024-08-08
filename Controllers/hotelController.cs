@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WanderMateBackend.context;
+using WanderMateBackend.DTOs.HotelDTOs;
 using WanderMateBackend.Models;
 namespace WanderMateBackend.Controllers
 {
@@ -35,32 +36,42 @@ namespace WanderMateBackend.Controllers
 
         }
 
-       [HttpPost]
-public async Task<IActionResult> CreateHotel([FromBody] Hotel hotel)
-{
-    try
-    {
-        if (hotel == null)
+        [HttpPost]
+        public async Task<IActionResult> CreateHotel([FromBody] CreateHotelDTOs hotelDTO)
         {
-            return BadRequest("Hotel field are Empty");
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var hotel = new Hotel
+                {
+                    Name = hotelDTO.Name,
+                    Price = hotelDTO.Price,
+                    ImageUrl = hotelDTO.ImageUrl,
+                    Description = hotelDTO.Description,
+                    FreeCancellation = hotelDTO.FreeCancellation,
+                    ReserveNow = hotelDTO.ReserveNow
+                };
+
+
+                await _context.Hotels.AddAsync(hotel);
+                await _context.SaveChangesAsync();
+
+                var response = new
+                {
+                    message = "Hotel created successfully!",
+                    hotel
+                };
+
+                return CreatedAtAction(nameof(GetHotelById), new { id = hotel.Id }, response);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
-
-        await _context.Hotels.AddAsync(hotel);
-        await _context.SaveChangesAsync();
-
-        var response = new
-        {
-            message = "Hotel created successfully!",
-            hotel
-        };
-
-        return CreatedAtAction(nameof(GetHotelById), new { id = hotel.Id }, response);
-    }
-    catch (Exception)
-    {
-        return StatusCode(500, "An error occurred while processing your request.");
-    }
-}
 
         [HttpGet("id")]
         public async Task<IActionResult> GetHotelById(int id)
