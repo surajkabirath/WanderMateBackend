@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WanderMateBackend.DTOs.HotelDTOs
 {
-    public class CreateHotelDTOs
+    public class CreateAndUpdateHotelDTOs
     {
          public string? Name {get; set;}
         public float Price {get; set;}

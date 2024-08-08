@@ -23,36 +23,36 @@ namespace WanderMateBackend.Controllers
         {
             try
             {
-
                 var hotel = await _context.Hotels.ToListAsync();
                 if (hotel == null)
                 {
                     return NotFound("No Hotel Data Found");
                 }
-                var hotelDto = hotel.Select(hotel => new HotelDTOs
+
+                var createHotelDTO = hotel.Select(h => new HotelDTOs
                 {
-                    Id = hotel.Id,
-                    Name = hotel.Name,
-                    Price = hotel.Price,
-                    ImageUrl = hotel.ImageUrl,
-                    Description = hotel.Description,
-                    FreeCancellation = hotel.FreeCancellation,
-                    ReserveNow = hotel.ReserveNow
+                    Id = h.Id,
+                    Name = h.Name,
+                    Price = h.Price,
+                    ImageUrl = h.ImageUrl,
+                    Description = h.Description,
+                    FreeCancellation = h.FreeCancellation,
+                    ReserveNow = h.ReserveNow
                 });
 
-                return Ok(new { message = "The Hotel Data fectched  Successfully!", hotelDto });
+                return Ok(new { message = "The Hotel Data fetched Successfully!", createHotelDTO });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "An error occurred while processing your request.");
 
+
+                return StatusCode(500, ex.Message);
             }
-
-
         }
 
+
         [HttpPost]
-        public async Task<IActionResult> CreateHotel([FromBody] CreateHotelDTOs hotelDTO)
+        public async Task<IActionResult> CreateHotel([FromBody] CreateAndUpdateHotelDTOs createHotelDTO)
         {
             try
             {
@@ -62,12 +62,12 @@ namespace WanderMateBackend.Controllers
                 }
                 var hotel = new Hotel
                 {
-                    Name = hotelDTO.Name,
-                    Price = hotelDTO.Price,
-                    ImageUrl = hotelDTO.ImageUrl,
-                    Description = hotelDTO.Description,
-                    FreeCancellation = hotelDTO.FreeCancellation,
-                    ReserveNow = hotelDTO.ReserveNow
+                    Name = createHotelDTO.Name,
+                    Price = createHotelDTO.Price,
+                    ImageUrl = createHotelDTO.ImageUrl,
+                    Description = createHotelDTO.Description,
+                    FreeCancellation = createHotelDTO.FreeCancellation,
+                    ReserveNow = createHotelDTO.ReserveNow
                 };
 
 
@@ -82,9 +82,9 @@ namespace WanderMateBackend.Controllers
 
                 return CreatedAtAction(nameof(GetHotelById), new { id = hotel.Id }, response);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "An error occurred while processing your request.");
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -99,7 +99,7 @@ namespace WanderMateBackend.Controllers
                 {
                     return NotFound("Given Hotel ID is not Found");
                 }
-                var hotelDtoById = new HotelDTOs
+                var createHotelDTOById = new HotelDTOs
                 {
                     Id = hotelById.Id,
                     Name = hotelById.Name,
@@ -110,17 +110,17 @@ namespace WanderMateBackend.Controllers
                     ReserveNow = hotelById.ReserveNow
                 };
 
-                return Ok(new { message = "Given Id Details:", hotelDtoById });
+                return Ok(new { message = "Given Id Details:", createHotelDTOById });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "An error occurred while processing your request.");
+                return StatusCode(500, ex.Message);
             }
 
         }
 
         [HttpPut("id")]
-        public async Task<IActionResult> UpdateHotel(int Id, [FromBody] Hotel hotel)
+        public async Task<IActionResult> UpdateHotel(int Id, [FromBody] CreateAndUpdateHotelDTOs updateHotelDTO)
         {
             try
             {
@@ -131,19 +131,23 @@ namespace WanderMateBackend.Controllers
                     return NotFound("Given Hotel ID is not Found");
                 }
 
-                hotelToUpdate.Name = hotel.Name;
-                hotelToUpdate.Price = hotel.Price;
-                hotelToUpdate.ImageUrl = hotel.ImageUrl;
-                hotelToUpdate.Description = hotel.Description;
-                hotelToUpdate.FreeCancellation = hotel.FreeCancellation;
-                hotelToUpdate.ReserveNow = hotel.ReserveNow;
+                hotelToUpdate.Name = updateHotelDTO.Name;
+                hotelToUpdate.Price = updateHotelDTO.Price;
+                hotelToUpdate.ImageUrl = updateHotelDTO.ImageUrl;
+                hotelToUpdate.Description = updateHotelDTO.Description;
+                hotelToUpdate.FreeCancellation = updateHotelDTO.FreeCancellation;
+                hotelToUpdate.ReserveNow = updateHotelDTO.ReserveNow;
+
+
+                _context.Entry(hotelToUpdate).State = EntityState.Modified;
+
 
                 await _context.SaveChangesAsync();
                 return Ok(new { message = "Hotel is Updated Successfully!!", hotelToUpdate });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "An error occurred while processing your request.");
+                return StatusCode(500, ex.Message);
             }
 
 
@@ -163,9 +167,9 @@ namespace WanderMateBackend.Controllers
                 await _context.SaveChangesAsync();
                 return Ok(new { message = "Hotel is Deleted Successfully!!", hotel });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "An error occurred while processing your request.");
+                return StatusCode(500, ex.Message);
             }
 
         }
@@ -174,16 +178,16 @@ namespace WanderMateBackend.Controllers
         {
             try
             {
-                var hotel = await _context.Hotels.Where(h => h.Name!.Contains(name)).ToListAsync();
+                var hotel = await _context.Hotels.Where(h => h.Name.Contains(name)).ToListAsync();
                 if (hotel == null)
                 {
                     return NotFound("Hotel Name is not Found");
                 }
-                return Ok(new { message = "Hotel Name is Found Successfully!!", hotel });
+                return Ok(new { message = "Related Hotel Name are Found Successfully!!", hotel });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "An error occurred while processing your request.");
+                return StatusCode(500, ex.Message);
             }
 
 
