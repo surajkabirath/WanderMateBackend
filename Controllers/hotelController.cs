@@ -95,7 +95,7 @@ namespace WanderMateBackend.Controllers
                 hotelToUpdate.ReserveNow = hotel.ReserveNow;
 
                 await _context.SaveChangesAsync();
-                return Ok(new{message="Hotel is Updated Successfully!!",hotelToUpdate});
+                return Ok(new { message = "Hotel is Updated Successfully!!", hotelToUpdate });
             }
             catch (Exception)
             {
@@ -108,7 +108,8 @@ namespace WanderMateBackend.Controllers
         [HttpDelete("id")]
         public async Task<IActionResult> DeleteHotel(int Id)
         {
-            try{
+            try
+            {
                 var hotel = await _context.Hotels.FindAsync(Id);
                 if (hotel == null)
                 {
@@ -116,23 +117,32 @@ namespace WanderMateBackend.Controllers
                 }
                 _context.Hotels.Remove(hotel);
                 await _context.SaveChangesAsync();
-                return Ok(new{message="Hotel is Deleted Successfully!!",hotel});
+                return Ok(new { message = "Hotel is Deleted Successfully!!", hotel });
             }
             catch (Exception)
             {
                 return StatusCode(500, "An error occurred while processing your request.");
             }
-          
+
         }
         [HttpGet("search")]
         public async Task<IActionResult> SearchHotel(string name)
         {
-            var hotel = await _context.Hotels.Where(h => h.Name!.Contains(name)).ToListAsync();
-            if (hotel == null)
+            try
             {
-                return NotFound();
+                var hotel = await _context.Hotels.Where(h => h.Name!.Contains(name)).ToListAsync();
+                if (hotel == null)
+                {
+                    return NotFound();
+                }
+                return Ok(hotel);
             }
-            return Ok(hotel);
+            catch (Exception)
+            {
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+
+
         }
 
     }

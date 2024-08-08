@@ -11,7 +11,7 @@ using WanderMateBackend.context;
 namespace WanderMateBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240806084906_init")]
+    [Migration("20240808034352_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -53,7 +53,7 @@ namespace WanderMateBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("hotels");
+                    b.ToTable("Hotels");
                 });
 #pragma warning restore 612, 618
         }

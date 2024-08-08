@@ -50,7 +50,7 @@ namespace WanderMateBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("hotels");
+                    b.ToTable("Hotels");
                 });
 #pragma warning restore 612, 618
         }

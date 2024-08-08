@@ -11,7 +11,7 @@ namespace WanderMateBackend.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "hotels",
+                name: "Hotels",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -25,7 +25,7 @@ namespace WanderMateBackend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_hotels", x => x.Id);
+                    table.PrimaryKey("PK_Hotels", x => x.Id);
                 });
         }
 
@@ -33,7 +33,7 @@ namespace WanderMateBackend.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "hotels");
+                name: "Hotels");
         }
     }
 }
