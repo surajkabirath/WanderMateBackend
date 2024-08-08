@@ -29,7 +29,7 @@ namespace WanderMateBackend.Controllers
                     return NotFound("No Hotel Data Found");
                 }
 
-                var createHotelDTO = hotel.Select(h => new HotelDTOs
+                var createHotelDTO = hotel.Select(h => new GetHotelDTOs
                 {
                     Id = h.Id,
                     Name = h.Name,
@@ -52,7 +52,7 @@ namespace WanderMateBackend.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateHotel([FromBody] CreateAndUpdateHotelDTOs createHotelDTO)
+        public async Task<IActionResult> CreateHotel([FromBody] HotelDTOs createHotelDTO)
         {
             try
             {
@@ -101,7 +101,7 @@ namespace WanderMateBackend.Controllers
                 }
                 var createHotelDTOById = new HotelDTOs
                 {
-                    Id = hotelById.Id,
+               
                     Name = hotelById.Name,
                     Price = hotelById.Price,
                     ImageUrl = hotelById.ImageUrl,
@@ -120,7 +120,7 @@ namespace WanderMateBackend.Controllers
         }
 
         [HttpPut("id")]
-        public async Task<IActionResult> UpdateHotel(int Id, [FromBody] CreateAndUpdateHotelDTOs updateHotelDTO)
+        public async Task<IActionResult> UpdateHotel(int Id, [FromBody] HotelDTOs updateHotelDTO)
         {
             try
             {
@@ -178,7 +178,7 @@ namespace WanderMateBackend.Controllers
         {
             try
             {
-                var hotel = await _context.Hotels.Where(h => h.Name.Contains(name)).ToListAsync();
+                var hotel = await _context.Hotels.Where(h => h.Name!.Contains(name)).ToListAsync();
                 if (hotel == null)
                 {
                     return NotFound("Hotel Name is not Found");
