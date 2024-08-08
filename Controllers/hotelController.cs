@@ -12,30 +12,35 @@ namespace WanderMateBackend.Controllers
     public class hotelController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        public hotelController(ApplicationDbContext context){
+        public hotelController(ApplicationDbContext context)
+        {
             _context = context;
         }
         [HttpGet]
-        public IActionResult GetHotels(){
-           var hotel = _context.Hotels.ToList();
-            return Ok(hotel) ;
+        public IActionResult GetHotels()
+        {
+            var hotel = _context.Hotels.ToList();
+            return Ok(hotel);
         }
 
         [HttpPost]
-        public IActionResult CreateHotel([FromBody] Hotel hotel){
-            var newHotel =_context.Hotels.Add(hotel);
+        public IActionResult CreateHotel([FromBody] Hotel hotel)
+        {
+            var newHotel = _context.Hotels.Add(hotel);
             _context.SaveChanges();
             return Ok(newHotel.Entity);
         }
 
-        [HttpGet ("Id")]
-        public IActionResult GetHotelById(int Id){
+        [HttpGet("Id")]
+        public IActionResult GetHotelById(int Id)
+        {
             var hotel = _context.Hotels.Find(Id);
             return Ok(hotel);
         }
 
         [HttpPut("id")]
-        public IActionResult UpdateHotel(int Id, [FromBody] Hotel hotel){
+        public IActionResult UpdateHotel(int Id, [FromBody] Hotel hotel)
+        {
             var hotelToUpdate = _context.Hotels.Find(Id);
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
             hotelToUpdate.Name = hotel.Name;
@@ -50,14 +55,16 @@ namespace WanderMateBackend.Controllers
         }
 
         [HttpDelete("id")]
-        public IActionResult DeleteHotel(int Id){
+        public IActionResult DeleteHotel(int Id)
+        {
             var hotel = _context.Hotels.Find(Id);
             _context.Hotels.Remove(hotel);
             _context.SaveChanges();
             return Ok(hotel);
         }
-       [HttpGet("search")]
-        public IActionResult SearchHotel(string name){
+        [HttpGet("search")]
+        public IActionResult SearchHotel(string name)
+        {
             var hotel = _context.Hotels.Where(h => h.Name.Contains(name)).ToList();
             return Ok(hotel);
         }
