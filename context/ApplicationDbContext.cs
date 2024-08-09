@@ -19,7 +19,14 @@ namespace WanderMateBackend.context
         public DbSet<Review> Reviews { get; set; }
 
 
-      
+   protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<Review>()
+        .HasOne(r => r.Hotel)
+        .WithMany(h => h.Reviews)
+        .HasForeignKey(r => r.HotelId);
+}
+
     }
 }
 

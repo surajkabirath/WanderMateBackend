@@ -29,7 +29,7 @@ namespace WanderMateBackend.Controllers
                     return NotFound("No Hotel Data Found");
                 }
 
-                var createHotelDTO = hotel.Select(h => new GetHotelDTOs
+                var getHotelDTO = hotel.Select(h => new GetHotelDTOs
                 {
                     Id = h.Id,
                     Name = h.Name,
@@ -40,7 +40,7 @@ namespace WanderMateBackend.Controllers
                     ReserveNow = h.ReserveNow
                 });
 
-                return Ok(new { message = "The Hotel Data fetched Successfully!", createHotelDTO });
+                return Ok(new { message = "The Hotel Data fetched Successfully!", getHotelDTO });
             }
             catch (Exception ex)
             {

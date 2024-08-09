@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WanderMateBackend.context;
+using WanderMateBackend.DTOs.ReviewDTOs;
 using WanderMateBackend.Models;
 
 namespace WanderMateBackend.Controllers
@@ -34,7 +35,7 @@ namespace WanderMateBackend.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message); // Return 500 Internal Server Error with the exception message
+                return StatusCode(500, new { message = "An error occurred while fetching reviews", error = ex.Message }); // Return 500 Internal Server Error with the exception message
             }
         }
 
@@ -57,49 +58,63 @@ namespace WanderMateBackend.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message); // Return 500 Internal Server Error with the exception message
+                return StatusCode(500, new { message = "An error occurred while fetching the review", error = ex.Message }); // Return 500 Internal Server Error with the exception message
             }
         }
 
         // POST: api/Review
-        [HttpPost]
-        public async Task<IActionResult> CreateReview([FromBody] Review review)
+      [HttpPost]
+public async Task<ActionResult> Create([FromBody] ReviewDTO reviewDto)
+{
+    try
+    {
+        // Debug log
+        Console.WriteLine($"Received DTO: Rating = {reviewDto.Rating}, HotelId = {reviewDto.HotelId}");
+
+        // Validate if HotelId exists
+        var hotelExists = await _context.Hotels.AnyAsync(h => h.Id == reviewDto.HotelId);
+        if (!hotelExists)
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest("Invalid Data");
-                }
-
-                review.CreatedOn = DateTime.Now;
-                await _context.Reviews.AddAsync(review);
-                await _context.SaveChangesAsync();
-
-                return Ok(new { message = "Review Created Successfully!", review });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            return BadRequest(new { message = "Invalid HotelId" });
         }
+
+        var review = new Review
+        {
+            Rating = reviewDto.Rating,
+            ReviewText = reviewDto.ReviewText,
+            HotelId = reviewDto.HotelId,
+            
+        };
+
+        await _context.Reviews.AddAsync(review);
+        await _context.SaveChangesAsync();
+
+        return Ok("Created successfully");
+    }
+    catch (Exception ex)
+    {
+        // Log exception details
+        Console.WriteLine($"Exception: {ex.Message}");
+        return StatusCode(500, new { message = "An error occurred while creating the review", error = ex.Message });
+    }
+}
 
         // PUT: api/Review/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateReview(int id, [FromBody] Review review)
         {
+            if (id != review.ReviewId)
+            {
+                return BadRequest("Review ID mismatch");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid data");
+            }
+
             try
             {
-                if (id != review.ReviewId)
-                {
-                    return BadRequest("Review ID mismatch");
-                }
-
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest("Invalid Data");
-                }
-
                 var existingReview = await _context.Reviews.FindAsync(id);
                 if (existingReview == null)
                 {
@@ -118,7 +133,7 @@ namespace WanderMateBackend.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, new { message = "An error occurred while updating the review", error = ex.Message });
             }
         }
 
@@ -141,7 +156,7 @@ namespace WanderMateBackend.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, new { message = "An error occurred while deleting the review", error = ex.Message });
             }
         }
     }
