@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using WanderMateBackend.context;
 
 namespace WanderMateBackend.Controllers
 {
@@ -10,6 +11,11 @@ namespace WanderMateBackend.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        
+        private readonly ApplicationDbContext _context;
+        public AuthController(ApplicationDbContext context)
+        {
+            _context = context;
+
+        }
     }
 }
