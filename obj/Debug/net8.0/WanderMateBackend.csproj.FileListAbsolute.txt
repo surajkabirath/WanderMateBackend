@@ -138,3 +138,4 @@ D:\2024\iic\finalProject\WanderMateBackend\obj\Debug\net8.0\WanderMateBackend.ge
 D:\2024\iic\finalProject\WanderMateBackend\obj\Debug\net8.0\ref\WanderMateBackend.dll
 D:\2024\iic\finalProject\WanderMateBackend\bin\Debug\net8.0\Npgsql.dll
 D:\2024\iic\finalProject\WanderMateBackend\bin\Debug\net8.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
+D:\2024\iic\finalProject\WanderMateBackend\bin\Debug\net8.0\BCrypt.Net-Next.dll
