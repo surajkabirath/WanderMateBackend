@@ -69,20 +69,20 @@ public async Task<IActionResult> CreateUser([FromBody] UserDTO createUserDto)
         {
             return BadRequest("Passwords do not match.");
         }
-
+        var HashPassword = BCrypt.Net.BCrypt.HashPassword(createUserDto.Password);
         // Create a new user
         var newUser = new User
         {
             Username = createUserDto.Username,
             Email = createUserDto.Email,
-            Password = BCrypt.Net.BCrypt.HashPassword(createUserDto.Password)
+            Password = HashPassword
         };
 
         // Add the new user to the database
         await _context.Users.AddAsync(newUser);
         await _context.SaveChangesAsync();
 
-        return Ok(new { message = "User created successfully." });
+        return Ok("User created successfully.");
     }
     catch (Exception ex)
     {

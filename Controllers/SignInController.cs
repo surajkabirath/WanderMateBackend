@@ -22,32 +22,31 @@ namespace WanderMateBackend.Controllers
 
         }
         [HttpPost]
-        public async Task<IActionResult> SignInUser([FromBody] SignInDTO signInDto)
+        public async Task<IActionResult> UserLogin([FromBody] SignInDTO signInDTO)
         {
             try
             {
-                // Search for the user by email
-                var searchUsername = await _context.Users.SingleOrDefaultAsync(u => u.Username == signInDto.Username);
+                var user = await _context.Users.SingleOrDefaultAsync(u => u.Username == signInDTO.Username);
 
-                if (searchUsername == null)
+                if (user == null)
                 {
-                    return BadRequest("Email does not exist!!");
+                    return BadRequest("Username does not exist.");
                 }
 
-                // Verify the password using BCrypt
-                bool isPasswordValid = BCrypt.Net.BCrypt.Verify(signInDto.Password, searchUsername.Password);
+                bool isPasswordValid = BCrypt.Net.BCrypt.Verify(signInDTO.Password, user.Password);
                 if (!isPasswordValid)
                 {
-                    return BadRequest("Password is incorrect!!");
+                    return BadRequest("Password is incorrect.");
                 }
 
-                return Ok(new { message = "User Signed In Successfully!" });
+                return Ok("User signed in successfully!" );
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return StatusCode(500, ex.Message);
             }
         }
+
 
     }
 }
