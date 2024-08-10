@@ -132,7 +132,7 @@ namespace WanderMateBackend.Controllers
                 user.Email = updateUserDto.Email;
                 user.Password = updateUserDto.Password;
                 await _context.SaveChangesAsync();
-                return Ok(new { message = "User Updated Successfully!" });
+                return Ok( "User Updated Successfully!" );
             }
             catch (Exception ex)
             {
