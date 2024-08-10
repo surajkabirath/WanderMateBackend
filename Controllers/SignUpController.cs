@@ -45,51 +45,51 @@ namespace WanderMateBackend.Controllers
             }
         }
 
-[HttpPost]
-public async Task<IActionResult> CreateUser([FromBody] UserDTO createUserDto)
-{
-    try
-    {
-        // Check if the email already exists
-        var emailExists = await _context.Users.SingleOrDefaultAsync(u => u.Email == createUserDto.Email);
-        if (emailExists != null)
+        [HttpPost]
+        public async Task<IActionResult> CreateUser([FromBody] UserDTO createUserDto)
         {
-            return BadRequest("Email already exists.");
+            try
+            {
+                // Check if the email already exists
+                var emailExists = await _context.Users.SingleOrDefaultAsync(u => u.Email == createUserDto.Email);
+                if (emailExists != null)
+                {
+                    return BadRequest("Email already exists.");
+                }
+
+                // Check if the username already exists
+                var usernameExists = await _context.Users.SingleOrDefaultAsync(u => u.Username == createUserDto.Username);
+                if (usernameExists != null)
+                {
+                    return BadRequest("Username already exists.");
+                }
+
+                // Check if passwords match
+                if (createUserDto.Password != createUserDto.ConfirmPassword)
+                {
+                    return BadRequest("Passwords do not match.");
+                }
+                var HashPassword = BCrypt.Net.BCrypt.HashPassword(createUserDto.Password);
+                // Create a new user
+                var newUser = new User
+                {
+                    Username = createUserDto.Username,
+                    Email = createUserDto.Email,
+                    Password = HashPassword
+                };
+
+                // Add the new user to the database
+                await _context.Users.AddAsync(newUser);
+                await _context.SaveChangesAsync();
+
+                return Ok("User created successfully.");
+            }
+            catch (Exception ex)
+            {
+                // Handle other exceptions
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
-
-        // Check if the username already exists
-        var usernameExists = await _context.Users.SingleOrDefaultAsync(u => u.Username == createUserDto.Username);
-        if (usernameExists != null)
-        {
-            return BadRequest("Username already exists.");
-        }
-
-        // Check if passwords match
-        if (createUserDto.Password != createUserDto.ConfirmPassword)
-        {
-            return BadRequest("Passwords do not match.");
-        }
-        var HashPassword = BCrypt.Net.BCrypt.HashPassword(createUserDto.Password);
-        // Create a new user
-        var newUser = new User
-        {
-            Username = createUserDto.Username,
-            Email = createUserDto.Email,
-            Password = HashPassword
-        };
-
-        // Add the new user to the database
-        await _context.Users.AddAsync(newUser);
-        await _context.SaveChangesAsync();
-
-        return Ok("User created successfully.");
-    }
-    catch (Exception ex)
-    {
-        // Handle other exceptions
-        return StatusCode(500, $"Internal server error: {ex.Message}");
-    }
-}
 
 
 
@@ -112,6 +112,27 @@ public async Task<IActionResult> CreateUser([FromBody] UserDTO createUserDto)
                     Password = user.Password
                 };
                 return Ok(new { message = "The User Data fetched Successfully!", getUserDto });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpPut("id")]
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserDTO updateUserDto)
+        {
+            try
+            {
+                var user = await _context.Users.FindAsync(id);
+                if (user == null)
+                {
+                    return NotFound("No User Data Found");
+                }
+                user.Username = updateUserDto.Username;
+                user.Email = updateUserDto.Email;
+                user.Password = updateUserDto.Password;
+                await _context.SaveChangesAsync();
+                return Ok(new { message = "User Updated Successfully!" });
             }
             catch (Exception ex)
             {
