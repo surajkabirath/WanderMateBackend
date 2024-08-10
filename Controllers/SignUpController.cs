@@ -45,43 +45,54 @@ namespace WanderMateBackend.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] UserDTO createUserDto)
+[HttpPost]
+public async Task<IActionResult> CreateUser([FromBody] UserDTO createUserDto)
+{
+    try
+    {
+        // Check if the email already exists
+        var emailExists = await _context.Users.SingleOrDefaultAsync(u => u.Email == createUserDto.Email);
+        if (emailExists != null)
         {
-            try
-            {
-                var searchUserEmail = await _context.Users.SingleOrDefaultAsync(u => u.Email == createUserDto.Email);
-
-                if (searchUserEmail != null)
-                {
-                    return BadRequest("Email already exists!!");
-                }
-
-                if (createUserDto.Password != createUserDto.ConfirmPassword)
-                {
-                    return BadRequest("Passwords do not match!!");
-                }
-
-                var newUser = new User
-                {
-                    Username = createUserDto.Username,
-                    Email = createUserDto.Email,
-                    Password = BCrypt.Net.BCrypt.HashPassword(createUserDto.Password)
-                };
-
-                await _context.Users.AddAsync(newUser);
-                await _context.SaveChangesAsync();
-
-                // return StatusCode(200, "User Created Successfully!!");
-                return Ok(new { message = "User Created Successfully!!", newUser });
-            }
-
-            catch (Exception ex)
-            {
-                // Handle other exceptions
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            return BadRequest("Email already exists.");
         }
+
+        // Check if the username already exists
+        var usernameExists = await _context.Users.SingleOrDefaultAsync(u => u.Username == createUserDto.Username);
+        if (usernameExists != null)
+        {
+            return BadRequest("Username already exists.");
+        }
+
+        // Check if passwords match
+        if (createUserDto.Password != createUserDto.ConfirmPassword)
+        {
+            return BadRequest("Passwords do not match.");
+        }
+
+        // Create a new user
+        var newUser = new User
+        {
+            Username = createUserDto.Username,
+            Email = createUserDto.Email,
+            Password = BCrypt.Net.BCrypt.HashPassword(createUserDto.Password)
+        };
+
+        // Add the new user to the database
+        await _context.Users.AddAsync(newUser);
+        await _context.SaveChangesAsync();
+
+        return Ok(new { message = "User created successfully." });
+    }
+    catch (Exception ex)
+    {
+        // Handle other exceptions
+        return StatusCode(500, $"Internal server error: {ex.Message}");
+    }
+}
+
+
+
 
         [HttpGet("id")]
         public async Task<IActionResult> GetUserById(int id)
@@ -107,7 +118,29 @@ namespace WanderMateBackend.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            try
+            {
+                var user = await _context.Users.FindAsync(id);
+                if (user == null)
+                {
+                    return NotFound("No User Data Found");
+                }
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+                return Ok(new { message = "User Deleted Successfully!" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
+
+
 
 
 }
