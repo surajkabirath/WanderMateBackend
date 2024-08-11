@@ -20,12 +20,12 @@ namespace WanderMateBackend.Controllers
     public class AuthController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly TokenService _tokenService;
+        // private readonly TokenService _tokenService;
 
-        public AuthController(ApplicationDbContext context, TokenService tokenService)
+        public AuthController(ApplicationDbContext context)
         {
             _context = context;
-            _tokenService = tokenService;
+            // _tokenService = tokenService;
 
 
 
@@ -49,14 +49,16 @@ namespace WanderMateBackend.Controllers
                 }
 
                 // Generate JWT token
-                var token = _tokenService.GenerateToken(user);
+                // var token = _tokenService.GenerateToken(user);
 
                 // Store token and user data in the session
                 // HttpContext.Session.SetString("AuthToken", token);
                 // HttpContext.Session.SetString("UserName", user.Username ?? string.Empty);
                 // HttpContext.Session.SetString("Email", user.Email ?? string.Empty);
 
-                return Ok(new { Message = "User signed in successfully!", Token = token });
+                // return Ok(new { Message = "User signed in successfully!", Token = token });
+
+                return Ok("User signed in successfully!");
             }
             catch (Exception ex)
             {

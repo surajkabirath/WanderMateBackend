@@ -1,9 +1,10 @@
-
+// enable jwt authentication
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+
 using Microsoft.EntityFrameworkCore;
+//provides classes and methods for managing the tokens, including creating, validating, and handling the cryptographic aspects of JWT.
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+
 using System.Text;
 using WanderMateBackend.context;
 using WanderMateBackend.Service;
@@ -36,7 +37,10 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddSingleton<TokenService>();
 
-// builder.Services.AddControllers();
+
+// Configure JWT authentication with options for token validation, including issuer, audience, and signing key settings.
+
+//authentication service method which is passing 
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
