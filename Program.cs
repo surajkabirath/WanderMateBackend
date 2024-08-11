@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 using Microsoft.EntityFrameworkCore;
-//provides classes and methods for managing the tokens, including creating, validating, and handling the cryptographic aspects of JWT.
+//provides classes and methods for managing the cryptographic tools needed for creating and validating tokens. It focuses on the security aspects like encryption, signing, and validation.
 using Microsoft.IdentityModel.Tokens;
 
 using System.Text;
