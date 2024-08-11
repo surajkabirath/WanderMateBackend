@@ -1,10 +1,9 @@
-using System;
-using System.Collections.Generic;
+
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
+
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
+
 using Microsoft.IdentityModel.Tokens;
 using WanderMateBackend.Models;
 
@@ -20,6 +19,7 @@ namespace WanderMateBackend.Service
 
         public string GenerateToken(User user)
         {
+            // provides the cryptographic tools needed for creating and validating tokens. It focuses on the security aspects like encryption, signing, and validation.`using Microsoft.IdentityModel.Tokens`
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? string.Empty));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -31,7 +31,7 @@ namespace WanderMateBackend.Service
             new Claim(JwtRegisteredClaimNames.Sub, user.Username ?? string.Empty),
 
             };
-
+            // handling JSON Web Tokens (JWTs). It provides classes to create, serialize, and parse JWTs  using this package `using System.IdentityModel.Tokens.Jwt`
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
