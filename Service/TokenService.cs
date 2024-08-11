@@ -21,14 +21,15 @@ namespace WanderMateBackend.Service
         public string GenerateToken(User user)
         {
 
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? string.Empty));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
             {
-            new Claim(JwtRegisteredClaimNames.Jti, user.Id.ToString()),
+                //Globally Unique Identifier
+           new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Sub, user.Username ?? string.Empty),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),
+
             };
 
             var token = new JwtSecurityToken(
