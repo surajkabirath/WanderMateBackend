@@ -139,3 +139,9 @@ D:\2024\iic\finalProject\WanderMateBackend\obj\Debug\net8.0\ref\WanderMateBacken
 D:\2024\iic\finalProject\WanderMateBackend\bin\Debug\net8.0\Npgsql.dll
 D:\2024\iic\finalProject\WanderMateBackend\bin\Debug\net8.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
 D:\2024\iic\finalProject\WanderMateBackend\bin\Debug\net8.0\BCrypt.Net-Next.dll
+D:\2024\iic\finalProject\WanderMateBackend\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\2024\iic\finalProject\WanderMateBackend\bin\Debug\net8.0\Microsoft.AspNetCore.Authorization.dll
+D:\2024\iic\finalProject\WanderMateBackend\bin\Debug\net8.0\Microsoft.AspNetCore.Metadata.dll
+D:\2024\iic\finalProject\WanderMateBackend\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+D:\2024\iic\finalProject\WanderMateBackend\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+D:\2024\iic\finalProject\WanderMateBackend\bin\Debug\net8.0\Microsoft.Extensions.Options.dll

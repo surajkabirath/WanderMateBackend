@@ -7,17 +7,20 @@ using Microsoft.EntityFrameworkCore;
 using WanderMateBackend.context;
 using WanderMateBackend.DTOs.UserDTOs;
 using WanderMateBackend.Models;
+using WanderMateBackend.Service;
 
 namespace WanderMateBackend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class SignUpController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        public SignUpController(ApplicationDbContext context)
+     
+        public UserController(ApplicationDbContext context)
         {
             _context = context;
+          
         }
         [HttpGet]
         public async Task<IActionResult> GetUsers()
@@ -45,7 +48,7 @@ namespace WanderMateBackend.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("SignUp")]
         public async Task<IActionResult> CreateUser([FromBody] UserDTO createUserDto)
         {
             try
@@ -77,7 +80,7 @@ namespace WanderMateBackend.Controllers
                     Email = createUserDto.Email,
                     Password = HashPassword
                 };
-
+              
                 // Add the new user to the database
                 await _context.Users.AddAsync(newUser);
                 await _context.SaveChangesAsync();
@@ -94,51 +97,51 @@ namespace WanderMateBackend.Controllers
 
 
 
-        [HttpGet("id")]
-        public async Task<IActionResult> GetUserById(int id)
-        {
-            try
-            {
-                var user = await _context.Users.FindAsync(id);
-                if (user == null)
-                {
-                    return NotFound("No User Data Found");
-                }
-                var getUserDto = new GetUserByIdDTO
-                {
+        // [HttpGet("id")]
+        // public async Task<IActionResult> GetUserById(int id)
+        // {
+        //     try
+        //     {
+        //         var user = await _context.Users.FindAsync(id);
+        //         if (user == null)
+        //         {
+        //             return NotFound("No User Data Found");
+        //         }
+        //         var getUserDto = new GetUserByIdDTO
+        //         {
 
-                    Username = user.Username,
-                    Email = user.Email,
-                    Password = user.Password
-                };
-                return Ok(new { message = "The User Data fetched Successfully!", getUserDto });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-        [HttpPut("id")]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserDTO updateUserDto)
-        {
-            try
-            {
-                var user = await _context.Users.FindAsync(id);
-                if (user == null)
-                {
-                    return NotFound("No User Data Found");
-                }
-                user.Username = updateUserDto.Username;
-                user.Email = updateUserDto.Email;
-                user.Password = updateUserDto.Password;
-                await _context.SaveChangesAsync();
-                return Ok( "User Updated Successfully!" );
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
+        //             Username = user.Username,
+        //             Email = user.Email,
+        //             Password = user.Password
+        //         };
+        //         return Ok(new { message = "The User Data fetched Successfully!", getUserDto });
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         return StatusCode(500, ex.Message);
+        //     }
+        // }
+        // [HttpPut("id")]
+        // public async Task<IActionResult> UpdateUser(int id, [FromBody] UserDTO updateUserDto)
+        // {
+        //     try
+        //     {
+        //         var user = await _context.Users.FindAsync(id);
+        //         if (user == null)
+        //         {
+        //             return NotFound("No User Data Found");
+        //         }
+        //         user.Username = updateUserDto.Username;
+        //         user.Email = updateUserDto.Email;
+        //         user.Password = updateUserDto.Password;
+        //         await _context.SaveChangesAsync();
+        //         return Ok( "User Updated Successfully!" );
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         return StatusCode(500, ex.Message);
+        //     }
+        // }
 
         [HttpDelete]
         public async Task<IActionResult> DeleteUser(int id)
