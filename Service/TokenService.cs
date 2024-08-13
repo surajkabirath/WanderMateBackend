@@ -17,7 +17,7 @@ namespace WanderMateBackend.Service
             _configuration = configuration;
         }
 
-        public string GenerateToken(User user)
+        public string GenerateToken(User user, bool isPasswordValid)
         {
             // provides the cryptographic tools needed for creating and validating tokens. It focuses on the security aspects like encryption, signing, and validation.`using Microsoft.IdentityModel.Tokens`
 

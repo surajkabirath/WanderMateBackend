@@ -20,12 +20,12 @@ namespace WanderMateBackend.Controllers
     public class AuthController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        // private readonly TokenService _tokenService;
+        private readonly TokenService _tokenService;
 
-        public AuthController(ApplicationDbContext context)
+        public AuthController(ApplicationDbContext context , TokenService tokenService)
         {
             _context = context;
-            // _tokenService = tokenService;
+            _tokenService = tokenService;
 
 
 
@@ -49,16 +49,16 @@ namespace WanderMateBackend.Controllers
                 }
 
                 // Generate JWT token
-                // var token = _tokenService.GenerateToken(user);
+                var token = _tokenService.GenerateToken(user, isPasswordValid);
 
                 // Store token and user data in the session
-                // HttpContext.Session.SetString("AuthToken", token);
-                // HttpContext.Session.SetString("UserName", user.Username ?? string.Empty);
-                // HttpContext.Session.SetString("Email", user.Email ?? string.Empty);
+                HttpContext.Session.SetString("AuthToken", token);
+                HttpContext.Session.SetString("UserName", user.Username ?? string.Empty);
+                HttpContext.Session.SetString("Email", user.Email ?? string.Empty);
 
-                // return Ok(new { Message = "User signed in successfully!", Token = token });
+                return Ok(new { Message = "User signed in successfully!", Token = token });
 
-                return Ok("User signed in successfully!");
+                // return Ok("User signed in successfully!");
             }
             catch (Exception ex)
             {
@@ -68,30 +68,30 @@ namespace WanderMateBackend.Controllers
 
 
         }
-        //    [HttpPost ("logout")]
-        // public IActionResult Logout()
-        // {
-        //     try
-        //     {
-        //         // Retrieve user information from the session before clearing it
-        //         string username = HttpContext.Session.GetString("UserName") ?? string.Empty;
+           [HttpPost ("logout")]
+        public IActionResult Logout()
+        {
+            try
+            {
+                // Retrieve user information from the session before clearing it
+                string username = HttpContext.Session.GetString("UserName") ?? string.Empty;
 
-        //         if (string.IsNullOrEmpty(username))
-        //         {
-        //             return BadRequest("No user is currently logged in.");
-        //         }
+                if (string.IsNullOrEmpty(username))
+                {
+                    return BadRequest("No user is currently logged in.");
+                }
 
-        //         // Clear the session data
-        //         HttpContext.Session.Clear();
+                // Clear the session data
+                HttpContext.Session.Clear();
 
-        //         // Optionally, you can log or handle the logout event as needed
-        //         return Ok(new { Message = $"{username} has logged out successfully!" });
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         return StatusCode(500, ex.Message);
-        //     }
-        // }
+                // Optionally, you can log or handle the logout event as needed
+                return Ok(new { Message = $"{username} has logged out successfully!" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
 
 
     }
