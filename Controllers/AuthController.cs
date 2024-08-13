@@ -53,8 +53,10 @@ namespace WanderMateBackend.Controllers
 
                 // Store token and user data in the session
                 HttpContext.Session.SetString("AuthToken", token);
-                HttpContext.Session.SetString("UserName", user.Username ?? string.Empty);
-                HttpContext.Session.SetString("Email", user.Email ?? string.Empty);
+                HttpContext.Session.SetString("Id", user.Id.ToString() );
+                HttpContext.Session.SetString("Role", user.Role );
+                HttpContext.Session.SetString("UserName", user.Username );
+                HttpContext.Session.SetString("Email", user.Email );
 
                 return Ok(new { Message = "User signed in successfully!", Token = token });
 
@@ -82,10 +84,10 @@ namespace WanderMateBackend.Controllers
                 }
 
                 // Clear the session data
-                HttpContext.Session.Clear();
+                 HttpContext.Session.Clear();
 
                 // Optionally, you can log or handle the logout event as needed
-                return Ok(new { Message = $"{username} has logged out successfully!" });
+                return Ok(new { Message = $"{username} has logged out successfully!"});
             }
             catch (Exception ex)
             {

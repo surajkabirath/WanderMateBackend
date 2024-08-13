@@ -20,7 +20,7 @@ namespace WanderMateBackend.Service
         public string GenerateToken(User user, bool isPasswordValid)
         {
             // provides the cryptographic tools needed for creating and validating tokens. It focuses on the security aspects like encryption, signing, and validation.`using Microsoft.IdentityModel.Tokens`
-
+//SymmetricSecurityKey used  both for encyption and decryption
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? string.Empty));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
