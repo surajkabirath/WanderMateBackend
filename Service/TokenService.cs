@@ -21,14 +21,16 @@ namespace WanderMateBackend.Service
         {
             // provides the cryptographic tools needed for creating and validating tokens. It focuses on the security aspects like encryption, signing, and validation.`using Microsoft.IdentityModel.Tokens`
 //SymmetricSecurityKey used  both for encyption and decryption
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? string.Empty));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
             {
                 //Globally Unique Identifier
-           new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Sub, user.Username ?? string.Empty),
+           new Claim(JwtRegisteredClaimNames.Jti, user.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.Sub, user.Username ),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email ),
+            new Claim(JwtRegisteredClaimNames.GivenName, user.Role ),
 
             };
             // handling JSON Web Tokens (JWTs). It provides classes to create, serialize, and parse JWTs  using this package `using System.IdentityModel.Tokens.Jwt`
