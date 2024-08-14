@@ -15,12 +15,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDistributedMemoryCache();
 
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
 
 //for relationship we must add this jsonserilizer
 builder.Services.AddControllers();
@@ -102,7 +96,6 @@ builder.Services.AddSwaggerGen(opt =>
 var app = builder.Build();
 
 
-app.UseSession(); // Enable session
 
 // Enable CORS
 app.UseCors("AllowAllOrigins");

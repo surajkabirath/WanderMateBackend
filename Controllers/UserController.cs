@@ -16,11 +16,11 @@ namespace WanderMateBackend.Controllers
     public class UserController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-     
+
         public UserController(ApplicationDbContext context)
         {
             _context = context;
-          
+
         }
         [HttpGet]
         public async Task<IActionResult> GetUsers()
@@ -37,7 +37,8 @@ namespace WanderMateBackend.Controllers
                     Id = u.Id,
                     Username = u.Username,
                     Email = u.Email,
-                    Password = u.Password
+                    Role = u.Role
+                  
 
                 });
                 return Ok(new { message = "The User Data fetched Successfully!", getUserDto });
@@ -76,11 +77,12 @@ namespace WanderMateBackend.Controllers
                 // Create a new user
                 var newUser = new User
                 {
+                    Role = createUserDto.Role,
                     Username = createUserDto.Username,
                     Email = createUserDto.Email,
                     Password = HashPassword
                 };
-              
+
                 // Add the new user to the database
                 await _context.Users.AddAsync(newUser);
                 await _context.SaveChangesAsync();
