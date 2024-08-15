@@ -12,9 +12,11 @@ using WanderMateBackend.context;
 using WanderMateBackend.DTOs.UserDTOs;
 using WanderMateBackend.Models;
 using WanderMateBackend.Service;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WanderMateBackend.Controllers
 {
+
     [ApiController]
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
@@ -62,6 +64,14 @@ namespace WanderMateBackend.Controllers
             }
 
 
+
+        }
+        [Authorize]
+        [HttpGet("verify-token")]
+        public IActionResult VerifyToken()
+        {
+
+            return Ok("Token is Verified");
 
         }
 

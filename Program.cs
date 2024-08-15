@@ -1,6 +1,7 @@
 // enable jwt authentication
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 //provides classes and methods for managing the cryptographic tools needed for creating and validating tokens. It focuses on the security aspects like encryption, signing, and validation.
 using Microsoft.IdentityModel.Tokens;
@@ -107,7 +108,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseHttpsRedirection();
 
 app.Run();

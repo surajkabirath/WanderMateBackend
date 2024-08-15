@@ -38,7 +38,7 @@ namespace WanderMateBackend.Controllers
                     Username = u.Username,
                     Email = u.Email,
                     Role = u.Role
-                  
+
 
                 });
                 return Ok(new { message = "The User Data fetched Successfully!", getUserDto });
@@ -73,6 +73,7 @@ namespace WanderMateBackend.Controllers
                 {
                     return BadRequest("Passwords do not match.");
                 }
+                var role = string.IsNullOrEmpty(createUserDto.Role) ? "User" : createUserDto.Role;
                 var HashPassword = BCrypt.Net.BCrypt.HashPassword(createUserDto.Password);
                 // Create a new user
                 var newUser = new User
@@ -87,7 +88,17 @@ namespace WanderMateBackend.Controllers
                 await _context.Users.AddAsync(newUser);
                 await _context.SaveChangesAsync();
 
-                return Ok("User created successfully.");
+                return Ok(new
+                {
+                    message = "User created successfully.",
+                    user = new
+                    {
+                        newUser.Id,
+                        newUser.Username,
+                        newUser.Email,
+                        newUser.Role
+                    }
+                });
             }
             catch (Exception ex)
             {

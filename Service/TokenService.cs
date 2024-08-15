@@ -27,8 +27,9 @@ namespace WanderMateBackend.Service
             var claims = new[]
             {
                 //Globally Unique Identifier
-           new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+           new Claim(JwtRegisteredClaimNames.Jti, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Sub, user.Username ?? string.Empty),
+               new Claim("role", user.Role)
 
             };
             // handling JSON Web Tokens (JWTs). It provides classes to create, serialize, and parse JWTs  using this package `using System.IdentityModel.Tokens.Jwt`
