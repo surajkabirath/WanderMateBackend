@@ -87,6 +87,7 @@ namespace WanderMateBackend.Controllers
                 // Add the new user to the database
                 await _context.Users.AddAsync(newUser);
                 await _context.SaveChangesAsync();
+              
 
                 return Ok(new
                 {

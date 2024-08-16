@@ -52,9 +52,16 @@ namespace WanderMateBackend.Controllers
 
                 // Generate JWT token
                 var token = _tokenService.GenerateToken(user);
+                var response = new
+                {
+
+                    Token = token,
+                    Role = user.Role, // Ensure 'Role' is part of the user object
+                    ExpiresIn = DateTime.Now.AddMinutes(30)
+                };
 
 
-                return Ok(new { Message = "User signed in successfully!", Token = token });
+                return Ok(new { Message = "User signed in successfully!", response = response });
 
                 // return Ok("User signed in successfully!");
             }
