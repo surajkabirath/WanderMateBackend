@@ -30,6 +30,18 @@ namespace WanderMateBackend.Controllers
 
             }
         }
+        [HttpPost]
+        public async Task<IActionResult> AddBooking()
+        {
+            try
+            {
+                return Ok(new { message = "The Booking Data Added Successfully!" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
 
     }
 }
